@@ -5,8 +5,8 @@ text-to-speech (TTS) pipeline — a tested, rule-based TN engine for **English a
 Korean**, plus a clear-eyed analysis of where rules break and **neural seq2seq**
 models (ByT5 / mT5) become necessary.
 
-> **Live demo:** _add your deployed URL here_ (GitHub Pages / Vercel — see
-> [Deployment](#deployment))
+> **Live demo:** **https://snowtype.github.io/text-normalization-playground/**
+> · **Source:** https://github.com/Snowtype/text-normalization-playground
 
 ```
 Text  →  [ Text Normalization ]  →  G2P  →  Acoustic Model  →  Vocoder  →  🔊
