@@ -25,6 +25,12 @@ export {
 
 export { sinoKorean, nativeKorean, sinoDigits } from './koreanNumbers';
 
+export {
+  sinoJapanese,
+  japaneseDigits,
+  euphonicCounter,
+} from './japaneseNumbers';
+
 export { AMBIGUITY_CASES } from './ambiguity';
 export type { AmbiguityCase } from './ambiguity';
 

@@ -17,10 +17,13 @@ export default function Hero() {
         <p className="mt-4 max-w-2xl text-base leading-relaxed text-slate-400">
           An interactive, well-tested{' '}
           <span className="text-slate-200">rule-based</span> text-normalization
-          engine for <span className="text-slate-200">English</span> and{' '}
-          <span className="text-slate-200">Korean</span> — the stage that turns
-          written text (<span className="font-mono text-slate-300">$5</span>,{' '}
-          <span className="font-mono text-slate-300">3시</span>) into the spoken
+          engine for <span className="text-slate-200">English</span>,{' '}
+          <span className="text-slate-200">Korean</span>, and{' '}
+          <span className="text-slate-200">Japanese</span> — the stage that
+          turns written text (
+          <span className="font-mono text-slate-300">$5</span>,{' '}
+          <span className="font-mono text-slate-300">3시</span>,{' '}
+          <span className="font-mono text-slate-300">3時</span>) into the spoken
           form a TTS voice actually reads — plus a clear-eyed analysis of where
           rules break and <span className="text-slate-200">neural seq2seq</span>{' '}
           models take over.

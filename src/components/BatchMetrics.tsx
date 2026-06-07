@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { normalize, type Language, type SemioticClass } from '../tn';
 
 import BarChart from './BarChart';
+import { LANGUAGES } from './semioticMeta';
 
 const SAMPLE: Record<Language, string> = {
   en: `Invoice #4021 is due 4/15 for $2,499.00.
@@ -12,6 +13,10 @@ The router hit 100% load at 2.4GHz for 45 minutes.`,
 사과 5개와 커피 2잔, 합계 12000원입니다.
 제 번호는 010-1234-5678이고 사무실은 12층입니다.
 속도는 100km, 무게는 5kg입니다.`,
+  ja: `会議は12月25日3時30分です。
+りんご5個とコーヒー2杯、合計1500円です。
+私の番号は090-1234-5678で、オフィスは3階です。
+速度は100km、重さは5kgです。`,
 };
 
 export default function BatchMetrics() {
@@ -45,21 +50,21 @@ export default function BatchMetrics() {
           </h2>
         </div>
         <div className="inline-flex rounded-lg border border-ink-700 bg-ink-900 p-0.5">
-          {(['en', 'ko'] as Language[]).map((lang) => (
+          {LANGUAGES.map(({ code, label }) => (
             <button
-              key={lang}
+              key={code}
               onClick={() => {
-                setLanguage(lang);
-                setText(SAMPLE[lang]);
+                setLanguage(code);
+                setText(SAMPLE[code]);
               }}
               className={[
-                'rounded-md px-4 py-1.5 text-sm font-medium transition-colors',
-                language === lang
+                'rounded-md px-3.5 py-1.5 text-sm font-medium transition-colors',
+                language === code
                   ? 'bg-accent-cyan/15 text-accent-cyan'
                   : 'text-slate-400 hover:text-slate-200',
               ].join(' ')}
             >
-              {lang === 'en' ? 'English' : '한국어'}
+              {label}
             </button>
           ))}
         </div>

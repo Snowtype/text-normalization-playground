@@ -18,8 +18,8 @@ export default function Footer() {
 
         <div className="mt-6 flex flex-col gap-2 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between">
           <span>
-            Text Normalization Playground · rule-based TN for English &amp;
-            Korean
+            Text Normalization Playground · rule-based TN for English, Korean
+            &amp; Japanese
           </span>
           <span>
             Built for{' '}

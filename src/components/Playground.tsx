@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import { normalize, type Language } from '../tn';
+import { LANGUAGES } from './semioticMeta';
 import HighlightedOutput from './HighlightedOutput';
 import RuleTrace from './RuleTrace';
 
@@ -16,7 +17,17 @@ const EXAMPLES: Record<Language, string[]> = {
     '제 번호는 010-1234-5678이고 나이는 20살입니다.',
     '이 건물은 12층이고 속도는 100km까지 나옵니다.',
   ],
+  ja: [
+    '今3時30分で、会議は12月25日です。',
+    'コーヒー2杯で500円、りんごは3個ください。',
+    '私の番号は090-1234-5678で、年齢は20歳です。',
+    'この建物は3階で、速度は100kmまで出ます。',
+  ],
 };
+
+// Flat set of all preset strings, so we can tell whether the user has typed
+// their own text (and must not have it wiped on a language switch).
+const ALL_PRESETS = new Set(Object.values(EXAMPLES).flat());
 
 export default function Playground() {
   const [language, setLanguage] = useState<Language>('en');
@@ -27,10 +38,15 @@ export default function Playground() {
 
   const switchLanguage = (lang: Language) => {
     setLanguage(lang);
-    // Swap in a representative example when the language changes.
-    setInput(EXAMPLES[lang][0]);
     setActiveIndex(null);
+    // Only swap in a sample if the user hasn't typed their own text.
+    if (input.trim() === '' || ALL_PRESETS.has(input)) {
+      setInput(EXAMPLES[lang][0]);
+    }
   };
+
+  const hasInput = input.trim() !== '';
+  const showEmptyHint = hasInput && result.spans.length === 0;
 
   return (
     <section
@@ -43,22 +59,26 @@ export default function Playground() {
           <h2 className="mt-1 text-2xl font-semibold text-slate-100">
             Written form in, spoken form out
           </h2>
+          <p className="mt-1 text-sm text-slate-500">
+            Live as you type — no button. Only non-standard tokens (numbers,
+            dates, money, units…) change; plain words pass through untouched.
+          </p>
         </div>
 
         {/* Language toggle */}
         <div className="inline-flex rounded-lg border border-ink-700 bg-ink-900 p-0.5">
-          {(['en', 'ko'] as Language[]).map((lang) => (
+          {LANGUAGES.map(({ code, label }) => (
             <button
-              key={lang}
-              onClick={() => switchLanguage(lang)}
+              key={code}
+              onClick={() => switchLanguage(code)}
               className={[
-                'rounded-md px-4 py-1.5 text-sm font-medium transition-colors',
-                language === lang
+                'rounded-md px-3.5 py-1.5 text-sm font-medium transition-colors',
+                language === code
                   ? 'bg-accent-cyan/15 text-accent-cyan'
                   : 'text-slate-400 hover:text-slate-200',
               ].join(' ')}
             >
-              {lang === 'en' ? 'English' : '한국어 Korean'}
+              {label}
             </button>
           ))}
         </div>
@@ -99,7 +119,9 @@ export default function Playground() {
               placeholder={
                 language === 'en'
                   ? 'Type text with numbers, dates, money…'
-                  : '숫자, 날짜, 금액이 포함된 문장을 입력하세요…'
+                  : language === 'ko'
+                    ? '숫자, 날짜, 금액이 포함된 문장을 입력하세요…'
+                    : '数字・日付・金額を含む文を入力してください…'
               }
               className="w-full resize-y rounded-lg border border-ink-700 bg-ink-950/70 p-3 font-mono text-[15px] text-slate-100 outline-none transition-colors focus:border-accent-cyan/50"
             />
@@ -119,6 +141,14 @@ export default function Playground() {
               activeIndex={activeIndex}
               onHoverSpan={setActiveIndex}
             />
+            {showEmptyHint && (
+              <p className="mt-3 border-t border-ink-800 pt-3 text-xs text-slate-500">
+                Output equals input — no non-standard tokens found here. Try a
+                number, date, time, $, %, a unit like{' '}
+                <span className="font-mono text-slate-400">12km</span>, or check
+                the language toggle matches your text.
+              </p>
+            )}
           </div>
         </div>
 

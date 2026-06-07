@@ -6,7 +6,14 @@
  * giving every component one place to look up how a class should render.
  */
 
-import type { SemioticClass } from '../tn';
+import type { Language, SemioticClass } from '../tn';
+
+/** Display order + labels for the language toggles. */
+export const LANGUAGES: { code: Language; label: string }[] = [
+  { code: 'en', label: 'English' },
+  { code: 'ko', label: '한국어' },
+  { code: 'ja', label: '日本語' },
+];
 
 export interface SemioticMeta {
   label: string;

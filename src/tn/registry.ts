@@ -16,10 +16,12 @@ import type {
 } from './types';
 import { englishHandlers } from './english';
 import { koreanHandlers } from './korean';
+import { japaneseHandlers } from './japanese';
 
 const REGISTRY: Record<Language, SemioticHandler[]> = {
   en: englishHandlers,
   ko: koreanHandlers,
+  ja: japaneseHandlers,
 };
 
 /** The handler list for a language (exposed for coverage/inspection). */

@@ -7,7 +7,7 @@
  */
 
 /** Languages with a TN ruleset in this playground. */
-export type Language = 'en' | 'ko';
+export type Language = 'en' | 'ko' | 'ja';
 
 /**
  * Standard TN *semiotic classes*. A semiotic class is the category of a

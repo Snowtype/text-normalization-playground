@@ -612,4 +612,287 @@ export const TEST_CASES: TestCase[] = [
     expected: 'test 골뱅이 gmail 점 com',
     description: 'Email (@ -> 골뱅이, . -> 점)',
   },
+
+  // ===================== JAPANESE =====================
+
+  // CARDINAL (Sino, hiragana)
+  {
+    language: 'ja',
+    semioticClass: 'CARDINAL',
+    input: '1250',
+    expected: 'せんにひゃくごじゅう',
+    description: 'Sino-Japanese cardinal',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'CARDINAL',
+    input: '300',
+    expected: 'さんびゃく',
+    description: 'Rendaku on 百 (3→さんびゃく)',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'CARDINAL',
+    input: '10000',
+    expected: 'いちまん',
+    description: '10,000 keeps いち (unlike Korean)',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'CARDINAL',
+    input: '100',
+    expected: 'ひゃく',
+    description: 'Hundred',
+  },
+
+  // ORDINAL
+  {
+    language: 'ja',
+    semioticClass: 'ORDINAL',
+    input: '第3',
+    expected: 'だいさん',
+    description: 'Ordinal prefix 第',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'ORDINAL',
+    input: '3番目',
+    expected: 'さんばんめ',
+    description: 'Ordinal counter 番目',
+  },
+
+  // DECIMAL
+  {
+    language: 'ja',
+    semioticClass: 'DECIMAL',
+    input: '3.14',
+    expected: 'さんてんいちよん',
+    description: 'Decimal with 点',
+  },
+
+  // DATE
+  {
+    language: 'ja',
+    semioticClass: 'DATE',
+    input: '12月25日',
+    expected: 'じゅうにがつにじゅうごにち',
+    description: 'Month + day',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'DATE',
+    input: '4月',
+    expected: 'しがつ',
+    description: 'Irregular April reading (し)',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'DATE',
+    input: '1日',
+    expected: 'ついたち',
+    description: 'Irregular 1st-of-month (ついたち)',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'DATE',
+    input: '20日',
+    expected: 'はつか',
+    description: 'Irregular 20th (はつか)',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'DATE',
+    input: '2024年',
+    expected: 'にせんにじゅうよんねん',
+    description: 'Year',
+  },
+
+  // TIME
+  {
+    language: 'ja',
+    semioticClass: 'TIME',
+    input: '3時',
+    expected: 'さんじ',
+    description: 'Hour',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'TIME',
+    input: '4時',
+    expected: 'よじ',
+    description: 'Irregular 4 o’clock (よじ)',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'TIME',
+    input: '9時',
+    expected: 'くじ',
+    description: 'Irregular 9 o’clock (くじ)',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'TIME',
+    input: '3時30分',
+    expected: 'さんじさんじゅっぷん',
+    description: 'Hour + minute (ぷん)',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'TIME',
+    input: '7時15分',
+    expected: 'しちじじゅうごふん',
+    description: 'ふん vs ぷん alternation',
+  },
+
+  // MONEY
+  {
+    language: 'ja',
+    semioticClass: 'MONEY',
+    input: '100円',
+    expected: 'ひゃくえん',
+    description: 'Yen',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'MONEY',
+    input: '1500円',
+    expected: 'せんごひゃくえん',
+    description: 'Thousands of yen',
+  },
+
+  // PERCENT
+  {
+    language: 'ja',
+    semioticClass: 'PERCENT',
+    input: '50%',
+    expected: 'ごじゅうパーセント',
+    description: 'Percent',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'PERCENT',
+    input: '100パーセント',
+    expected: 'ひゃくパーセント',
+    description: 'Spelled-out percent unit',
+  },
+
+  // MEASURE (units)
+  {
+    language: 'ja',
+    semioticClass: 'MEASURE',
+    input: '12km',
+    expected: 'じゅうにキロメートル',
+    description: 'Metric distance',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'MEASURE',
+    input: '5kg',
+    expected: 'ごキログラム',
+    description: 'Mass',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'MEASURE',
+    input: '100m',
+    expected: 'ひゃくメートル',
+    description: 'Meter',
+  },
+
+  // COUNTERS (euphonic) — surfaced as MEASURE
+  {
+    language: 'ja',
+    semioticClass: 'MEASURE',
+    input: '3本',
+    expected: 'さんぼん',
+    description: 'Counter 本 rendaku (さんぼん)',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'MEASURE',
+    input: '1本',
+    expected: 'いっぽん',
+    description: 'Counter 本 gemination (いっぽん)',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'MEASURE',
+    input: '6本',
+    expected: 'ろっぽん',
+    description: 'Counter 本 (ろっぽん)',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'MEASURE',
+    input: '1人',
+    expected: 'ひとり',
+    description: 'People counter 1 (ひとり)',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'MEASURE',
+    input: '2人',
+    expected: 'ふたり',
+    description: 'People counter 2 (ふたり)',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'MEASURE',
+    input: '4人',
+    expected: 'よにん',
+    description: 'People counter 4 (よにん)',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'MEASURE',
+    input: '3個',
+    expected: 'さんこ',
+    description: 'Counter 個',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'MEASURE',
+    input: '20歳',
+    expected: 'はたち',
+    description: 'Irregular age 20 (はたち)',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'MEASURE',
+    input: '8歳',
+    expected: 'はっさい',
+    description: 'Age counter gemination (はっさい)',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'MEASURE',
+    input: '3階',
+    expected: 'さんがい',
+    description: 'Floor counter rendaku (さんがい)',
+  },
+  {
+    language: 'ja',
+    semioticClass: 'MEASURE',
+    input: '3時間',
+    expected: 'さんじかん',
+    description: 'Duration 時間 (Sino)',
+  },
+
+  // TELEPHONE
+  {
+    language: 'ja',
+    semioticClass: 'TELEPHONE',
+    input: '090-1234-5678',
+    expected: 'ゼロきゅうゼロ いちにさんよん ごろくななはち',
+    description: 'Mobile number (0 -> ゼロ)',
+  },
+
+  // ELECTRONIC
+  {
+    language: 'ja',
+    semioticClass: 'ELECTRONIC',
+    input: 'test@gmail.com',
+    expected: 'test アット gmail ドット com',
+    description: 'Email (@ -> アット, . -> ドット)',
+  },
 ];

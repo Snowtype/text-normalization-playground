@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { normalize, TEST_CASES, type Language } from '../tn';
-import { SEMIOTIC_META } from './semioticMeta';
+import { LANGUAGES, SEMIOTIC_META } from './semioticMeta';
 
 /**
  * The "Test cases" tab. It renders the exact `TEST_CASES` corpus that the
@@ -38,18 +38,18 @@ export default function TestCasesPanel() {
           </p>
         </div>
         <div className="inline-flex rounded-lg border border-ink-700 bg-ink-900 p-0.5">
-          {(['en', 'ko'] as Language[]).map((lang) => (
+          {LANGUAGES.map(({ code, label }) => (
             <button
-              key={lang}
-              onClick={() => setLanguage(lang)}
+              key={code}
+              onClick={() => setLanguage(code)}
               className={[
-                'rounded-md px-4 py-1.5 text-sm font-medium transition-colors',
-                language === lang
+                'rounded-md px-3.5 py-1.5 text-sm font-medium transition-colors',
+                language === code
                   ? 'bg-accent-cyan/15 text-accent-cyan'
                   : 'text-slate-400 hover:text-slate-200',
               ].join(' ')}
             >
-              {lang === 'en' ? 'English' : '한국어'}
+              {label}
             </button>
           ))}
         </div>

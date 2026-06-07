@@ -1,9 +1,9 @@
 # Text Normalization Playground
 
 An interactive demonstration of the **text-normalization (TN)** stage of a
-text-to-speech (TTS) pipeline — a tested, rule-based TN engine for **English and
-Korean**, plus a clear-eyed analysis of where rules break and **neural seq2seq**
-models (ByT5 / mT5) become necessary.
+text-to-speech (TTS) pipeline — a tested, rule-based TN engine for **English,
+Korean, and Japanese**, plus a clear-eyed analysis of where rules break and
+**neural seq2seq** models (ByT5 / mT5) become necessary.
 
 > **Live demo:** **https://snowtype.github.io/text-normalization-playground/**
 > · **Source:** https://github.com/Snowtype/text-normalization-playground
@@ -34,8 +34,10 @@ transformation, and then shows the cases a rule set fundamentally cannot solve.
 - **Live interactive normalizer** — type text, see the spoken form with each
   normalized span highlighted by class, and a full **rule trace**
   (`category · original → normalized · rule fired`) grouped by semiotic class.
-- **English ↔ Korean** toggle, including proper Korean numeral selection
-  (native vs. Sino-Korean — e.g. `2시` → `두 시`, `100원` → `백 원`).
+- **English / Korean / Japanese** toggle, including proper Korean numeral
+  selection (native vs. Sino-Korean — e.g. `2시` → `두 시`, `100원` → `백 원`)
+  and Japanese euphonic readings (`3本` → `さんぼん`, `1日` → `ついたち`,
+  `4時` → `よじ`).
 - **"Why neural TN?" showcase** — curated ambiguous inputs where the rule engine
   is forced into a fixed (sometimes wrong) choice, with the context a neural
   model would use to disambiguate.
@@ -45,26 +47,30 @@ transformation, and then shows the cases a rule set fundamentally cannot solve.
 
 ## Semiotic classes covered
 
-| Class            | Example (EN)                         | Example (KO)            |
-| ---------------- | ------------------------------------ | ----------------------- |
-| **CARDINAL**     | `1,250` → one thousand two hundred fifty | `1250` → 천이백오십  |
-| **ORDINAL**      | `3rd` → third                        | `3번째` → 세 번째 / `제3` → 제삼 |
-| **DECIMAL**      | `3.14` → three point one four        | `3.14` → 삼 점 일사     |
-| **DATE**         | `3/14` → March fourteenth            | `6월` → 유월 (irregular) |
-| **TIME**         | `2:30 PM` → two thirty PM            | `2시 30분` → 두 시 삼십 분 |
-| **MONEY**        | `$5` → five dollars                  | `100원` → 백 원         |
-| **PERCENT**      | `50%` → fifty percent                | `50%` → 오십 퍼센트     |
-| **MEASURE**      | `12km` → twelve kilometers           | `12km` → 십이 킬로미터  |
-| **TELEPHONE**    | `555-123-4567` → five five five …    | `010-1234-5678` → 공일공 … |
-| **DIGIT**        | `room 502` → room five zero two      | —                       |
-| **ELECTRONIC**   | `a@b.com` → a at b dot com           | `a@b.com` → a 골뱅이 b 점 com |
-| **ABBREVIATION** | `Dr.` → Doctor                       | —                       |
+| Class            | Example (EN)                             | Example (KO)              | Example (JA)            |
+| ---------------- | ---------------------------------------- | ------------------------- | ----------------------- |
+| **CARDINAL**     | `1,250` → one thousand two hundred fifty | `1250` → 천이백오십       | `1250` → せんにひゃくごじゅう |
+| **ORDINAL**      | `3rd` → third                            | `3번째` → 세 번째         | `第3` → だいさん        |
+| **DECIMAL**      | `3.14` → three point one four            | `3.14` → 삼 점 일사       | `3.14` → さんてんいちよん |
+| **DATE**         | `3/14` → March fourteenth                | `6월` → 유월 (irregular)  | `1日` → ついたち (irregular) |
+| **TIME**         | `2:30 PM` → two thirty PM                | `2시 30분` → 두 시 삼십 분 | `4時` → よじ (irregular) |
+| **MONEY**        | `$5` → five dollars                      | `100원` → 백 원           | `100円` → ひゃくえん    |
+| **PERCENT**      | `50%` → fifty percent                    | `50%` → 오십 퍼센트       | `50%` → ごじゅうパーセント |
+| **MEASURE**      | `12km` → twelve kilometers               | `12km` → 십이 킬로미터    | `3本` → さんぼん (rendaku) |
+| **TELEPHONE**    | `555-123-4567` → five five five …        | `010-1234-5678` → 공일공 … | `090-1234-5678` → ゼロきゅうゼロ … |
+| **DIGIT**        | `room 502` → room five zero two          | —                         | —                       |
+| **ELECTRONIC**   | `a@b.com` → a at b dot com               | `a@b.com` → a 골뱅이 b 점 com | `a@b.com` → a アット b ドット com |
+| **ABBREVIATION** | `Dr.` → Doctor                           | —                         | —                       |
 
-Korean number reading distinguishes **native** numerals (하나, 둘, 셋 …; used for
-hours, ages, and many counters) from **Sino-Korean** numerals (일, 이, 삼 …; used
-for dates, money, minutes, measurements), including irregulars such as
-`6월` → 유월 and `10월` → 시월. Choosing the wrong system is the single most
-common Korean TN error.
+**Korean** distinguishes **native** numerals (하나, 둘, 셋 …; hours, ages, many
+counters) from **Sino-Korean** numerals (일, 이, 삼 …; dates, money, minutes,
+measures), with irregulars like `6월` → 유월, `10월` → 시월. Choosing the wrong
+system is the single most common Korean TN error.
+
+**Japanese** layers heavy *euphonic sound changes* (連濁 rendaku / 促音便
+gemination) on top — `3本` → さんぼん, `1本` → いっぽん, `6本` → ろっぽん — plus
+deeply irregular date/time readings (`1日` → ついたち, `20日` → はつか,
+`4月` → しがつ, `4時` → よじ). Output is hiragana (the reading fed to G2P).
 
 ## Why neural? The ambiguity that rules can't resolve
 
@@ -78,6 +84,8 @@ often depends on context a context-free rule cannot see:
 | `Dr.` (twice)      | "Doctor … Doctor"       | Doctor (title) vs. Drive (street) in one sentence | precedes a person vs. follows a place name         |
 | `2-3`              | "two-three"             | range vs. subtraction vs. date                    | "2-3 days" → range; "2-3 = -1" → subtraction       |
 | `3시` (KO)         | "세 시" (native)        | counter selects native, but the digit alone can't say which counter sense is meant | the counter 시 → native system |
+| `1日` (JA)         | "ついたち"              | ついたち (date, the 1st) vs. いちにち (one day, duration) | particles/context (1日に → date; 1日中 → duration) |
+| `4時` (JA)         | "よじ"                  | 4 reads し / よん / よ depending on the following counter | the counter selects the reading (時→よ, 月→し)   |
 
 > **This is why production TN uses neural seq2seq models.** Byte/character-level
 > encoder-decoders (ByT5, mT5) trained on large (written, spoken) corpora learn
@@ -98,8 +106,10 @@ src/
 │   ├── registry.ts          # orchestrator: collect candidates → resolve overlaps → emit tokens
 │   ├── english.ts           # English handlers (one per semiotic class)
 │   ├── korean.ts            # Korean handlers
+│   ├── japanese.ts          # Japanese handlers
 │   ├── englishNumbers.ts    # cardinal / ordinal / decimal → words
 │   ├── koreanNumbers.ts     # Sino & native Korean numerals (with attributive forms)
+│   ├── japaneseNumbers.ts   # Sino-Japanese numerals + euphonic counter readings
 │   ├── ambiguity.ts         # curated "why neural?" dataset
 │   ├── testCases.ts         # the shared input→expected corpus (single source of truth)
 │   ├── index.ts             # public API barrel
@@ -141,10 +151,10 @@ npm run test:watch     # watch mode
 npm run test:coverage   # coverage report (engine ≈ 98% statements)
 ```
 
-The suite has **140+ assertions**: a per-case corpus covering every semiotic
-class in both languages, unit tests for the number converters, and
-engine-mechanics tests (overlap resolution, trace integrity, empty/edge input,
-and that every ambiguity case runs cleanly).
+The suite has **195+ assertions**: a per-case corpus covering every semiotic
+class across all three languages, unit tests for the EN/KO/JA number converters,
+and engine-mechanics tests (overlap resolution, trace integrity, empty/edge
+input, and that every ambiguity case runs cleanly).
 
 ## Linting & formatting
 

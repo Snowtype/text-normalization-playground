@@ -118,4 +118,42 @@ export const AMBIGUITY_CASES: AmbiguityCase[] = [
     contextResolves:
       'Sense disambiguation of 배 plus the numeral-system choice — two coupled decisions a flat rule cannot make.',
   },
+  {
+    language: 'ja',
+    input: '1日',
+    readings: [
+      'ついたち (the 1st of the month)',
+      'いちにち (one day — a duration)',
+    ],
+    whyAmbiguous:
+      '1日 is read ついたち as a calendar date but いちにち as a duration — an identical surface form with two readings.',
+    contextResolves:
+      'Particles and surrounding words decide it (1日に → date; 1日中 → duration). A model reads the sentence; the rule here always picks ついたち.',
+  },
+  {
+    language: 'ja',
+    input: '4時',
+    readings: [
+      'よじ (4 o’clock)',
+      'し (as in 4月 → しがつ)',
+      'よん (plain count)',
+    ],
+    whyAmbiguous:
+      'The Sino numeral 4 has three readings (し / よん / よ). Which is correct is a lexical decision driven by the following counter.',
+    contextResolves:
+      'The counter selects the reading (時→よ, 月→し, default counting→よん). A neural model learns the full counter→reading table, exceptions included.',
+  },
+  {
+    language: 'ja',
+    input: '1/2',
+    readings: [
+      '1月2日 (Jan 2)',
+      '2分の1 (one half — reordered!)',
+      '1対2 (ratio)',
+    ],
+    whyAmbiguous:
+      'As in English and Korean the slash is shared by dates, fractions, and ratios — and Japanese fractions read the denominator first (2分の1).',
+    contextResolves:
+      'The model must both classify the sense and, for fractions, restructure the operands — something a flat substitution cannot do.',
+  },
 ];

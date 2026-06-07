@@ -21,9 +21,10 @@ describe('corpus coverage', () => {
     expect(TEST_CASES.length).toBeGreaterThanOrEqual(30);
   });
 
-  it('covers both languages', () => {
+  it('covers all three languages', () => {
     expect(TEST_CASES.some((t) => t.language === 'en')).toBe(true);
     expect(TEST_CASES.some((t) => t.language === 'ko')).toBe(true);
+    expect(TEST_CASES.some((t) => t.language === 'ja')).toBe(true);
   });
 
   it('covers every core semiotic class in English', () => {
@@ -69,6 +70,29 @@ describe('corpus coverage', () => {
     );
     for (const cls of required) {
       expect(present.has(cls), `missing Korean coverage for ${cls}`).toBe(true);
+    }
+  });
+
+  it('covers the core semiotic classes in Japanese', () => {
+    const required: SemioticClass[] = [
+      'CARDINAL',
+      'ORDINAL',
+      'DECIMAL',
+      'DATE',
+      'TIME',
+      'MONEY',
+      'PERCENT',
+      'MEASURE',
+      'TELEPHONE',
+      'ELECTRONIC',
+    ];
+    const present = new Set(
+      TEST_CASES.filter((t) => t.language === 'ja').map((t) => t.semioticClass),
+    );
+    for (const cls of required) {
+      expect(present.has(cls), `missing Japanese coverage for ${cls}`).toBe(
+        true,
+      );
     }
   });
 });
