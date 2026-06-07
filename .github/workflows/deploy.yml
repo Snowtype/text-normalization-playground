@@ -18,6 +18,11 @@ concurrency:
   group: pages
   cancel-in-progress: true
 
+# Run the GitHub-maintained actions on Node 24 (silences the Node 20
+# deprecation notice; this becomes the default on June 16, 2026).
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
 jobs:
   build:
     runs-on: ubuntu-latest
