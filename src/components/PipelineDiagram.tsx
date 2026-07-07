@@ -1,27 +1,25 @@
 /**
  * The TTS pipeline, with the Text-Normalization stage highlighted as the focus
- * of this playground. Purely presentational.
+ * of this playground. Purely presentational; stage copy comes from i18n.
  */
 
-interface Stage {
-  label: string;
-  sub: string;
-  active?: boolean;
-}
+import { useI18n } from '../i18n/context';
 
-const STAGES: Stage[] = [
-  { label: 'Text', sub: 'raw input' },
-  { label: 'Text Normalization', sub: 'written → spoken', active: true },
-  { label: 'G2P', sub: 'grapheme → phoneme' },
-  { label: 'Acoustic Model', sub: 'phoneme → mel' },
-  { label: 'Vocoder', sub: 'mel → waveform' },
+const STAGES = [
+  { key: 'text' },
+  { key: 'tn', active: true },
+  { key: 'g2p' },
+  { key: 'acoustic' },
+  { key: 'vocoder' },
 ];
 
 export default function PipelineDiagram() {
+  const { t } = useI18n();
+
   return (
     <div className="flex flex-wrap items-stretch gap-2">
       {STAGES.map((stage, i) => (
-        <div key={stage.label} className="flex items-center gap-2">
+        <div key={stage.key} className="flex items-center gap-2">
           <div
             className={[
               'flex min-w-[7.5rem] flex-col rounded-lg border px-3 py-2 transition-colors',
@@ -36,10 +34,10 @@ export default function PipelineDiagram() {
                 stage.active ? 'text-accent-cyan' : 'text-slate-300',
               ].join(' ')}
             >
-              {stage.label}
+              {t(`pipeline.${stage.key}.label`)}
             </span>
             <span className="font-mono text-[11px] text-slate-500">
-              {stage.sub}
+              {t(`pipeline.${stage.key}.sub`)}
             </span>
           </div>
           {i < STAGES.length - 1 && (

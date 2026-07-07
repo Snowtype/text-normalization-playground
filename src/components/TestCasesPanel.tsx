@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react';
 import { normalize, TEST_CASES, type Language } from '../tn';
 import { LANGUAGES, SEMIOTIC_META } from './semioticMeta';
+import Rich from './Rich';
+import { useI18n } from '../i18n/context';
 
 /**
  * The "Test cases" tab. It renders the exact `TEST_CASES` corpus that the
@@ -9,13 +11,16 @@ import { LANGUAGES, SEMIOTIC_META } from './semioticMeta';
  * hand-maintained list.
  */
 export default function TestCasesPanel() {
+  const { t } = useI18n();
   const [language, setLanguage] = useState<Language>('en');
 
   const { rows, passing } = useMemo(() => {
-    const rows = TEST_CASES.filter((t) => t.language === language).map((t) => {
-      const actual = normalize(t.input, t.language).output;
-      return { ...t, actual, pass: actual === t.expected };
-    });
+    const rows = TEST_CASES.filter((tc) => tc.language === language).map(
+      (tc) => {
+        const actual = normalize(tc.input, tc.language).output;
+        return { ...tc, actual, pass: actual === tc.expected };
+      },
+    );
     return { rows, passing: rows.filter((r) => r.pass).length };
   }, [language]);
 
@@ -23,18 +28,12 @@ export default function TestCasesPanel() {
     <section id="tests" className="mx-auto max-w-6xl scroll-mt-20 px-5 py-14">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="section-title">05 · Test suite</p>
+          <p className="section-title">{t('tests.sectionTitle')}</p>
           <h2 className="mt-1 text-2xl font-semibold text-slate-100">
-            The Vitest corpus, evaluated live
+            {t('tests.heading')}
           </h2>
           <p className="mt-2 max-w-2xl text-sm text-slate-400">
-            One shared source of truth (
-            <span className="font-mono text-slate-300">
-              src/tn/testCases.ts
-            </span>
-            ) drives both{' '}
-            <span className="font-mono text-slate-300">npm test</span> and this
-            view.
+            <Rich text={t('tests.description')} />
           </p>
         </div>
         <div className="inline-flex rounded-lg border border-ink-700 bg-ink-900 p-0.5">
@@ -64,7 +63,9 @@ export default function TestCasesPanel() {
               : 'border-accent-rose/40 bg-accent-rose/10 text-accent-rose',
           ].join(' ')}
         >
-          {passing === rows.length ? '✓ all passing' : '✗ failures'}
+          {passing === rows.length
+            ? t('tests.allPassing')
+            : t('tests.failures')}
         </span>
         <span className="font-mono text-sm text-slate-400">
           {passing} / {rows.length}
@@ -75,12 +76,14 @@ export default function TestCasesPanel() {
         <table className="w-full border-collapse text-sm">
           <thead>
             <tr className="bg-ink-850 text-left text-xs uppercase tracking-wider text-slate-400">
-              <th className="px-3 py-2.5 font-medium">Class</th>
-              <th className="px-3 py-2.5 font-medium">Input</th>
+              <th className="px-3 py-2.5 font-medium">{t('tests.thClass')}</th>
+              <th className="px-3 py-2.5 font-medium">{t('tests.thInput')}</th>
               <th className="px-3 py-2.5 font-medium">
-                Expected (spoken form)
+                {t('tests.thExpected')}
               </th>
-              <th className="px-3 py-2.5 font-medium text-center">Status</th>
+              <th className="px-3 py-2.5 font-medium text-center">
+                {t('tests.thStatus')}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -93,7 +96,7 @@ export default function TestCasesPanel() {
                       className="font-mono text-[11px] font-semibold"
                       style={{ color: meta.color }}
                     >
-                      {r.semioticClass}
+                      {t(`class.${r.semioticClass}`)}
                     </span>
                   </td>
                   <td className="px-3 py-2.5 font-mono text-slate-300">
@@ -103,7 +106,7 @@ export default function TestCasesPanel() {
                     {r.expected}
                     {!r.pass && (
                       <span className="mt-1 block font-mono text-[11px] text-accent-rose">
-                        got: {r.actual}
+                        {t('tests.gotLabel')} {r.actual}
                       </span>
                     )}
                   </td>

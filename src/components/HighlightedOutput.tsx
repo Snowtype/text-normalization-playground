@@ -1,5 +1,6 @@
 import type { TnResult } from '../tn';
 import { SEMIOTIC_META } from './semioticMeta';
+import { useI18n } from '../i18n/context';
 
 interface Props {
   result: TnResult;
@@ -17,10 +18,12 @@ export default function HighlightedOutput({
   activeIndex,
   onHoverSpan,
 }: Props) {
+  const { t } = useI18n();
+
   if (!result.input) {
     return (
       <p className="font-mono text-sm text-slate-600">
-        The spoken form will appear here…
+        {t('output.placeholder')}
       </p>
     );
   }

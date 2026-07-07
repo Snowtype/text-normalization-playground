@@ -3,6 +3,7 @@ import { normalize, type Language, type SemioticClass } from '../tn';
 
 import BarChart from './BarChart';
 import { LANGUAGES } from './semioticMeta';
+import { useI18n } from '../i18n/context';
 
 const SAMPLE: Record<Language, string> = {
   en: `Invoice #4021 is due 4/15 for $2,499.00.
@@ -20,6 +21,7 @@ The router hit 100% load at 2.4GHz for 45 minutes.`,
 };
 
 export default function BatchMetrics() {
+  const { t } = useI18n();
   const [language, setLanguage] = useState<Language>('en');
   const [text, setText] = useState(SAMPLE.en);
 
@@ -44,9 +46,9 @@ export default function BatchMetrics() {
     <section id="batch" className="mx-auto max-w-6xl scroll-mt-20 px-5 py-14">
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="section-title">04 · Batch &amp; metrics</p>
+          <p className="section-title">{t('batch.sectionTitle')}</p>
           <h2 className="mt-1 text-2xl font-semibold text-slate-100">
-            Normalize many lines, measure coverage
+            {t('batch.heading')}
           </h2>
         </div>
         <div className="inline-flex rounded-lg border border-ink-700 bg-ink-900 p-0.5">
@@ -76,7 +78,7 @@ export default function BatchMetrics() {
             htmlFor="batch-input"
             className="mb-2 block text-xs font-medium uppercase tracking-wider text-slate-500"
           >
-            Paste lines — one utterance per line
+            {t('batch.inputLabel')}
           </label>
           <textarea
             id="batch-input"
@@ -88,15 +90,15 @@ export default function BatchMetrics() {
           />
 
           <div className="mt-4 grid grid-cols-3 gap-2">
-            <Stat label="Lines" value={lines.length} />
-            <Stat label="Tokens normalized" value={totalSpans} />
-            <Stat label="Classes seen" value={distinctClasses} />
+            <Stat label={t('batch.statLines')} value={lines.length} />
+            <Stat label={t('batch.statTokens')} value={totalSpans} />
+            <Stat label={t('batch.statClasses')} value={distinctClasses} />
           </div>
         </div>
 
         <div className="card p-4">
           <span className="mb-3 block text-xs font-medium uppercase tracking-wider text-slate-500">
-            Distribution by semiotic class
+            {t('batch.distLabel')}
           </span>
           <BarChart counts={counts} />
         </div>

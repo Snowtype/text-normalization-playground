@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import type { NormalizedSpan, SemioticClass } from '../tn';
 import { SEMIOTIC_META } from './semioticMeta';
+import { useI18n } from '../i18n/context';
 
 interface Props {
   spans: NormalizedSpan[];
@@ -14,6 +15,8 @@ interface Props {
  * the engine's class coverage visible at a glance.
  */
 export default function RuleTrace({ spans, activeIndex, onHoverSpan }: Props) {
+  const { t } = useI18n();
+
   // Keep each span's original order index (matches HighlightedOutput) while
   // grouping by class for display.
   const grouped = useMemo(() => {
@@ -31,10 +34,7 @@ export default function RuleTrace({ spans, activeIndex, onHoverSpan }: Props) {
 
   if (spans.length === 0) {
     return (
-      <p className="font-mono text-sm text-slate-600">
-        No non-standard tokens detected. The trace lists every transformation
-        the engine applies.
-      </p>
+      <p className="font-mono text-sm text-slate-600">{t('trace.empty')}</p>
     );
   }
 
@@ -53,10 +53,15 @@ export default function RuleTrace({ spans, activeIndex, onHoverSpan }: Props) {
                   backgroundColor: `${meta.color}12`,
                 }}
               >
-                {meta.label}
+                {t(`class.${cls}`)}
               </span>
               <span className="text-xs text-slate-600">
-                {entries.length} {entries.length === 1 ? 'span' : 'spans'}
+                {t(
+                  entries.length === 1
+                    ? 'trace.spanCount.one'
+                    : 'trace.spanCount.other',
+                  { n: entries.length },
+                )}
               </span>
             </div>
             <ul className="space-y-1">

@@ -1,7 +1,9 @@
 import { useMemo, useState } from 'react';
 import { normalize, type Language } from '../tn';
 import { LANGUAGES } from './semioticMeta';
+import { useI18n } from '../i18n/context';
 import HighlightedOutput from './HighlightedOutput';
+import Rich from './Rich';
 import RuleTrace from './RuleTrace';
 
 const EXAMPLES: Record<Language, string[]> = {
@@ -30,6 +32,7 @@ const EXAMPLES: Record<Language, string[]> = {
 const ALL_PRESETS = new Set(Object.values(EXAMPLES).flat());
 
 export default function Playground() {
+  const { t } = useI18n();
   const [language, setLanguage] = useState<Language>('en');
   const [input, setInput] = useState(EXAMPLES.en[0]);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -55,13 +58,12 @@ export default function Playground() {
     >
       <div className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <p className="section-title">01 · Interactive normalizer</p>
+          <p className="section-title">{t('playground.sectionTitle')}</p>
           <h2 className="mt-1 text-2xl font-semibold text-slate-100">
-            Written form in, spoken form out
+            {t('playground.heading')}
           </h2>
           <p className="mt-1 text-sm text-slate-500">
-            Live as you type — no button. Only non-standard tokens (numbers,
-            dates, money, units…) change; plain words pass through untouched.
+            {t('playground.subtitle')}
           </p>
         </div>
 
@@ -108,7 +110,7 @@ export default function Playground() {
               htmlFor="tn-input"
               className="mb-2 block text-xs font-medium uppercase tracking-wider text-slate-500"
             >
-              Input — written text
+              {t('playground.inputLabel')}
             </label>
             <textarea
               id="tn-input"
@@ -116,13 +118,7 @@ export default function Playground() {
               onChange={(e) => setInput(e.target.value)}
               spellCheck={false}
               rows={4}
-              placeholder={
-                language === 'en'
-                  ? 'Type text with numbers, dates, money…'
-                  : language === 'ko'
-                    ? '숫자, 날짜, 금액이 포함된 문장을 입력하세요…'
-                    : '数字・日付・金額を含む文を入力してください…'
-              }
+              placeholder={t(`playground.placeholder.${language}`)}
               className="w-full resize-y rounded-lg border border-ink-700 bg-ink-950/70 p-3 font-mono text-[15px] text-slate-100 outline-none transition-colors focus:border-accent-cyan/50"
             />
           </div>
@@ -130,10 +126,10 @@ export default function Playground() {
           <div className="card p-4">
             <div className="mb-2 flex items-center justify-between">
               <span className="text-xs font-medium uppercase tracking-wider text-slate-500">
-                Output — spoken form
+                {t('playground.outputLabel')}
               </span>
               <span className="font-mono text-[11px] text-slate-600">
-                {result.spans.length} normalized
+                {t('playground.normalizedCount', { n: result.spans.length })}
               </span>
             </div>
             <HighlightedOutput
@@ -143,10 +139,7 @@ export default function Playground() {
             />
             {showEmptyHint && (
               <p className="mt-3 border-t border-ink-800 pt-3 text-xs text-slate-500">
-                Output equals input — no non-standard tokens found here. Try a
-                number, date, time, $, %, a unit like{' '}
-                <span className="font-mono text-slate-400">12km</span>, or check
-                the language toggle matches your text.
+                <Rich text={t('playground.emptyHint')} />
               </p>
             )}
           </div>
@@ -156,7 +149,7 @@ export default function Playground() {
         <div className="card p-4">
           <div className="mb-3 flex items-center justify-between">
             <span className="text-xs font-medium uppercase tracking-wider text-slate-500">
-              Rule trace — grouped by semiotic class
+              {t('playground.traceLabel')}
             </span>
           </div>
           <RuleTrace

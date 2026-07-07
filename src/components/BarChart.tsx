@@ -1,5 +1,6 @@
 import type { SemioticClass } from '../tn';
 import { SEMIOTIC_META } from './semioticMeta';
+import { useI18n } from '../i18n/context';
 
 interface Props {
   /** Counts keyed by semiotic class. */
@@ -11,6 +12,8 @@ interface Props {
  * distribution. Bars are widthed relative to the largest count.
  */
 export default function BarChart({ counts }: Props) {
+  const { t } = useI18n();
+
   const entries = (Object.entries(counts) as [SemioticClass, number][])
     .filter(([, n]) => n > 0)
     .sort((a, b) => b[1] - a[1]);
@@ -18,7 +21,7 @@ export default function BarChart({ counts }: Props) {
   if (entries.length === 0) {
     return (
       <p className="font-mono text-sm text-slate-600">
-        No tokens normalized yet.
+        {t('batch.chartEmpty')}
       </p>
     );
   }
@@ -33,7 +36,7 @@ export default function BarChart({ counts }: Props) {
         return (
           <div key={cls} className="flex items-center gap-3">
             <span className="w-28 shrink-0 text-right text-xs text-slate-400">
-              {meta.label}
+              {t(`class.${cls}`)}
             </span>
             <div className="h-5 flex-1 overflow-hidden rounded bg-ink-850">
               <div
